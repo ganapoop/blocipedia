@@ -110,6 +110,8 @@ GEM
     pry-rails (0.3.6)
       pry (>= 0.10.4)
     public_suffix (2.0.5)
+    pundit (1.1.0)
+      activesupport (>= 3.0.0)
     rack (1.6.8)
     rack-test (0.6.3)
       rack (>= 1.0)
@@ -220,6 +222,7 @@ DEPENDENCIES
   letter_opener
   pg
   pry-rails
+  pundit
   rails (= 4.2.5)
   rails_12factor
   rspec-rails (~> 3.0)
