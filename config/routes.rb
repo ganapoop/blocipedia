@@ -7,4 +7,6 @@ Rails.application.routes.draw do
   end
   resources :wikis
   get 'about' => 'welcome#about'
+  resources :charges, only: [:new, :create]
+  resources :downgrade, only: [:new, :create]
 end

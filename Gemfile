@@ -20,9 +20,10 @@ gem 'coffee-rails', '~> 4.1.0'
 gem 'jquery-rails'
 gem 'turbolinks'
 gem 'bootstrap-sass'
-gem 'figaro'
+gem 'figaro', '1.0'
 gem 'devise'
 gem 'pundit'
+gem 'stripe'
 
 
 group :development, :test do
