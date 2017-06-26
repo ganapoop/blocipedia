@@ -1,5 +1,5 @@
 <h1>Wikis</h1>
-<% if user_is_authorized_to_create? %>
+<% if policy(@wiki).create? %>
 <div class="row">
      <div class="col-md-4">
           <%= link_to "Make a New Wiki", new_wiki_path, class: 'btn btn-success' %>

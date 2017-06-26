@@ -23,6 +23,6 @@ class WikiPolicy < ApplicationPolicy
   end
 
   def destroy?
-    user.admin || @wiki.user == user
+    user.admin || wiki.user == user
   end
 end
