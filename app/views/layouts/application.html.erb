@@ -7,7 +7,7 @@
   <%= javascript_include_tag 'application', 'data-turbolinks-track' => true %>
   <%= csrf_meta_tags %>
 </head>
-<body>
+<body class="background">
   <div class="container">
     <ul class="nav nav-tabs">
       <li><%= link_to "Home", root_path %></li>
@@ -17,49 +17,47 @@
       <div class="pull-right-user-info">
         <% if user_signed_in? %>
         <div class="pull-right">
-          <!--Fixes a duplicate border-bottom line that occurred by calling the nav nav-tabs class twice-->
           <ul class="nav nav-tabs", style="border-bottom:0px;">
-            <li class="username">Signed in as: <strong><%= current_user.email %></strong></li>
-            <li><%= link_to 'Edit profile', edit_user_registration_path, class: 'navbar-link' %></li>
-            <li><%= link_to "Sign Out", destroy_user_session_path, method: :delete, class: 'navbar-link' %></li>
-            <% if current_user.standard? %>
-            <li><%= link_to 'Upgrade to Premium', new_charge_path, class: 'navbar-link' %></li>
-            <% elsif current_user.premium? %>
-            <li><%= link_to 'Downgrade Your Account', new_downgrade_path, class: 'navbar-link' %></li>
-            <% end %>
-          </ul>
+            <li class="username">Signed in as: <strong><%= current_user.email %></li>
+              <li><%= link_to 'Edit profile', edit_user_registration_path, class: 'navbar-link' %></li>
+              <% if current_user.standard? %>
+              <li><%= link_to 'Upgrade to Premium', new_charge_path, class: 'navbar-link' %></li>
+              <% elsif current_user.premium? %>
+              <li><%= link_to 'Downgrade Your Account', new_downgrade_path, class: 'navbar-link' %></li>
+              <% end %>
+              <li><%= link_to "Sign Out", destroy_user_session_path, method: :delete, class: 'navbar-link' %></li>
+            </ul>
+          </div>
+          <% else %>
+          <div class="pull-right">
+            <!--Again, removes the border-bottom duplication-->
+            <ul class="nav nav-tabs", style="border-bottom:0px;">
+              <li><%= link_to "Sign In", new_user_session_path, class: 'navbar-link' %></li>
+            </ul>
+          </div>
+          <% end %>
         </div>
-        <% else %>
-        <div class="pull-right">
-          <ul class="nav nav-tabs", style="border-bottom:0px;">
-            <li><%= link_to "Sign Up", new_user_registration_path, :class => 'navbar-link' %></li>
-            <li><%= link_to "Sign In", new_user_session_path, :class => 'navbar-link' %></li>
-          </ul>
-        </div>
+      </ul>
 
-        <% end %>
+      <% if flash[:notice] %>
+      <div class="alert alert-success">
+        <button type="button" class="close" data-dismiss="alert">&times;</button>
+        <%= flash[:notice] %>
       </div>
-    </ul>
+      <% elsif flash.now[:alert] %>
+      <div class="alert alert-danger">
+        <button type="button" class="close" data-dismiss="alert">&times;</button>
+        <%= flash.now[:alert] %>
+      </div>
+      <% elsif flash[:alert] %>
+      <div class="alert alert-warning">
+        <button type="button" class="close" data-dismiss="alert">&times;</button>
+        <%= flash[:alert] %>
+      </div>
+      <% end %>
 
-    <% if flash[:notice] %>
-    <div class="alert alert-success">
-      <button type="button" class="close" data-dismiss="alert">&times;</button>
-      <%= flash[:notice] %>
+      <%= yield %>
     </div>
-    <% elsif flash.now[:alert] %>
-    <div class="alert alert-danger">
-      <button type="button" class="close" data-dismiss="alert">&times;</button>
-      <%= flash.now[:alert] %>
-    </div>
-    <% elsif flash[:alert] %>
-    <div class="alert alert-warning">
-      <button type="button" class="close" data-dismiss="alert">&times;</button>
-      <%= flash[:alert] %>
-    </div>
-    <% end %>
 
-    <%= yield %>
-  </div>
-
-</body>
-</html>
+  </body>
+  </html>

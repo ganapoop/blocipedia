@@ -3,11 +3,9 @@ class DowngradeController < ApplicationController
   end
 
   def create
-    current_user.update_attribute(:standard, true)
-    current_user.update_attribute(:premium, false)
+    current_user.downgrade!
 
     flash[:notice] = "You have successfully downgraded your account."
-
-    redirect_to_root_path
+    redirect_to root_path
   end
 end

@@ -1,10 +1,12 @@
 class ChargesController < ApplicationController
   def create
+    # StripeCustomer.new(user: current_user, card: params[:stripe_token])
     customer = Stripe::Customer.create(
     email: current_user.email,
     card: params[:stripeToken]
     )
 
+    # StripeCustomer.charge
     charge = Stripe::Charge.create(
     customer: customer.id,
     amount: 15_00,
@@ -12,6 +14,7 @@ class ChargesController < ApplicationController
     currency: 'usd'
     )
 
+    # Called in StripeCustomer on the user passed in when charge is called
     current_user.update_attribute(:standard, false)
     current_user.update_attribute(:premium, true)
 

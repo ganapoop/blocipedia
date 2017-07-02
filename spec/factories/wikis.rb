@@ -1,8 +1,8 @@
 FactoryGirl.define do
   factory :wiki do
-    title "MyString"
-    body "MyText"
+    title { Faker::Hipster.sentence }
+    body { Faker::Hipster.paragraph }
     private false
-    user nil
+    user
   end
 end
