@@ -5,13 +5,8 @@ Rails.application.routes.draw do
   devise_scope :user do
     get '/users/sign_out' => 'devise/sessions#destroy'
   end
-  resources :wikis do
-    resources :collaborations, only: [:destroy, :create]
-  end
+  resources :wikis
   get 'about' => 'welcome#about'
   resources :charges, only: [:new, :create]
   resources :downgrade, only: [:new, :create]
-  # delete 'collaborations', to: 'collaborations#destroy'
-  #
-  # post 'collaborations', to: 'collaborations#create'
 end

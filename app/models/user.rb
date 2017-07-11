@@ -3,7 +3,9 @@ class User < ActiveRecord::Base
   # :lockable, :timeoutable and :omniauthable
   devise :database_authenticatable, :registerable, :confirmable,
   :recoverable, :rememberable, :trackable, :validatable
-  has_many :wikis
+
+  has_many :wikis, through: :collaborators
+  has_many :collaborators
 
   validates :role, presence: true
 

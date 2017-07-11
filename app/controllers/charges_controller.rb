@@ -2,16 +2,16 @@ class ChargesController < ApplicationController
   def create
     # StripeCustomer.new(user: current_user, card: params[:stripe_token])
     customer = Stripe::Customer.create(
-    email: current_user.email,
-    card: params[:stripeToken]
+      email: current_user.email,
+      card: params[:stripeToken]
     )
 
     # StripeCustomer.charge
     charge = Stripe::Charge.create(
-    customer: customer.id,
-    amount: 15_00,
-    description: "BigMoney Membership - #{current_user.email}",
-    currency: 'usd'
+      customer: customer.id,
+      amount: 15_00,
+      description: "BigMoney Membership - #{current_user.email}",
+      currency: 'usd'
     )
 
     # Called in StripeCustomer on the user passed in when charge is called
@@ -28,8 +28,9 @@ class ChargesController < ApplicationController
   end
 
   def new
+    binding.pry
     @stripe_btn_data = {
-      key: "#{ Rails.configuration.stripe[:publishable_key] }",
+      key: "#{Rails.configuration.stripe[:publishable_key]}",
       description: "Blocipedia Membership - #{current_user.email}",
       amount: 15_00
     }

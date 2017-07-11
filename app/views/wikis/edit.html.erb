@@ -1,15 +1,43 @@
-<% if policy(@wiki).update? %>
 <h1>Edit Wiki</h1>
+
 <div class="row">
-  <div class="col-md-4">
+  <div class="col-md-8">
     <p>Wiki rules</p>
     <ul>
       <li>Don't be a jerk.</li>
-      <li>Make a wiki anyone can edit!</li>
+      <li>Make a cool wiki!</li>
     </ul>
+    <%= form_for @wiki do |f| %>
+      <div class="form-group">
+        <%= f.label :title %>
+        <%= f.text_field :title, class: 'form-control', placeholder: "Enter wiki title" %>
+      </div>
+      <div class="form-group">
+        <%= f.label :body %>
+        <%= f.text_area :body, rows: 8, class: 'form-control', placeholder: "Enter wiki body" %>
+      </div>
+      <% if current_user.admin? || current_user.premium? && current_user == @wiki.user%>
+        <div class="form-group">
+          <%= f.label :private, class: 'checkbox' do %>
+            <%= f.check_box :private %> Private wiki
+          <% end %>
+        </div>
+      <% end %>
+      <div class="form-group">
+        <%= f.submit "Save", class: 'btn btn-success' %>
+      </div>
+    <% end %>
   </div>
-  <div class="col-md-8">
-     <%= render partial: 'wikis/form' %>
-  </div>
+
+  <% @users.each do |user| %>
+    <div>
+      <%= user.email %>
+      <% if user.wikis.include?(@wiki) %>
+        <%= button_to "Destroy Collaboration", wiki_collaboration_path(user_id: user.id, wiki_id: @wiki.id), method: :delete %>
+      <% else %>
+        <%= button_to "Add Collaboration", wiki_collaborations_path(user_id: user.id, wiki_id: @wiki.id), method: :post %>
+      <% end %>
+    </div>
+  <% end %>
+
 </div>
-<% end %>

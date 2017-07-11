@@ -1,12 +1,14 @@
 class WikisController < ApplicationController
-
   def index
-    @wikis = Wiki.visible_to(current_user)
+    @wikis = policy_scope(Wiki)
   end
 
   def show
     @wiki = Wiki.find(params[:id])
-    authorize @wiki
+    unless WikiPolicy.new(current_user, @wiki).show?
+      flash[:alert] = "You are not authorized to view this wiki."
+      redirect_to new_wikis_path
+    end
   end
 
   def new
@@ -16,6 +18,8 @@ class WikisController < ApplicationController
 
   def edit
     @wiki = Wiki.find(params[:id])
+    @users = User.includes(:wikis).all
+    authorize @wiki
   end
 
   def create
@@ -35,8 +39,10 @@ class WikisController < ApplicationController
     @wiki = Wiki.find(params[:id])
     @wiki.attributes=(wiki_params)
 
-
-    if @wiki.save
+    if @wiki.save && (@wiki.user == current_user || current_user.admin?)
+      flash[:notice] = "Wiki was updated successfully."
+      redirect_to @wiki
+    elsif @wiki.save
       flash[:notice] = "Wiki was updated successfully."
       redirect_to @wiki
     else
@@ -55,14 +61,11 @@ class WikisController < ApplicationController
       flash.now[:alert] = "There was an error deleting the wiki."
       render :show
     end
-  else
-    flash[:alert] = "You must be admin or the wiki owner!."
-    redirect_to wikis_path
   end
-end
 
-private
+  private
 
-def wiki_params
-  params.require(:wiki).permit(WikiPolicy.new(current_user, @wiki).allowed_params)
+  def wiki_params
+    params.require(:wiki).permit(:title, :body, :private)
+  end
 end
